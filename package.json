@@ -1,0 +1,17 @@
+{
+  "name": "workintegration",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "harvest": "^1.0.9",
+    "mysql": "^2.15.0",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {},
+  "description": ""
+}
