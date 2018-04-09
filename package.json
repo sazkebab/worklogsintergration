@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/bigquery": "^1.2.0",
     "harvest": "^1.0.9",
     "mysql": "^2.15.0",
     "request": "^2.83.0"
