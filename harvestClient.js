@@ -24,8 +24,8 @@ var init = function(){
 function getHarvestData(error, response, body) {      	
         if(!error){
           //console.log(body)
-          removeData(body);
-          //addNew(body)
+          //removeData(body);
+          addNew(body)
         }else{
           console.log("error: ", error);
         }
