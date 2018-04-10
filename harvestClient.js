@@ -62,7 +62,11 @@ function addNew(body){
   .on('error', console.error)
   .on('data', function(row) {
     for(var i in row){
-      maxDates.push(new Date(row[i].value));
+      if(row[i]!= null){
+        maxDates.push(new Date(row[i].value));
+      }else{
+        maxDates.push(0);
+      }
     }
     
   })

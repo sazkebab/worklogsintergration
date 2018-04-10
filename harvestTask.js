@@ -41,6 +41,8 @@ function addNew(body){
     for(var i in row){
       if(row[i]!= null){
         maxDates.push(new Date(row[i].value));
+      }else{
+        maxDates.push(0);
       }
     }
     
@@ -48,8 +50,6 @@ function addNew(body){
   .on('end', function() {
     var tasks = JSON.parse(body);
     var json=[];
-    maxDates[0] = maxDates[0] == null ? 0 : maxDates[0];
-    maxDates[1] = maxDates[1] == null ? 0 : maxDates[1];
     for (var i in tasks) {
       var updated = new Date(tasks[i].task.updated_at);
       var created = new Date(tasks[i].task.created_at);
