@@ -3,8 +3,8 @@ var cron = require('node-cron');
 var hc = require('./harvestClient.js');
 var hp = require('./harvestProject.js');
 var ht = require('./harvestTask.js');
-var hpc = require('./harvestProjectCos);
-var hl = require('./harvestLogs.js');t.js');
+var hpc = require('./harvestProjectCost');
+var hl = require('./harvestLogs.js');
 var hu = require('./harvestUser.js');
 console.log(new Date());
  
