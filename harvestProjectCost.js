@@ -106,7 +106,7 @@ function saveReportData(){
 	});
 }
 
-init();
+//init();
 module.exports = {
   init: init,
 }

@@ -169,7 +169,7 @@ function dateFormat(d){
     return yyyy.toString()+mm.toString()+dd.toString();
   
 }
-init();
+//init();
 module.exports = {
   init: init,
 }

@@ -98,7 +98,7 @@ function addNew(body){
  	});
 }*/
 
-init();
+//init();
 module.exports = {
   init: init,
 }
