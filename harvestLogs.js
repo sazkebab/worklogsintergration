@@ -77,7 +77,7 @@ function addDataToArray(error, response, body) {
  
 //save data to SQL
 function deleteData(){
-  console.log(timeData);
+  //console.log(timeData);
   sqlQuery = "UPDATE `bigq-drd-1.Timesheets.harvestClients`  SET deleted=TRUE Where id not in ("
   var firstOne = true;
   for (var i in timeData){
