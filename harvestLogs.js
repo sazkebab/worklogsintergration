@@ -77,17 +77,19 @@ function addDataToArray(error, response, body) {
  
 //save data to SQL
 function deleteData(){
-  //console.log(timeData);
   sqlQuery = "UPDATE `bigq-drd-1.Timesheets.harvestClients`  SET deleted=TRUE Where id not in ("
   var firstOne = true;
   for (var i in timeData){
         logs = JSON.parse(timeData[i]);
         for (var j in logs) {
-          if(!firstOne){
-            sqlQuery+=",";
-           }
-           firstOne = false;
-          sqlQuery+="'"+logs[j].day_entry.id.toString()+"'";
+          if(logs[j].day_entry != undefined ){
+            if(!firstOne){
+             sqlQuery+=",";
+            }
+            firstOne = false;
+            sqlQuery+="'"+logs[j].day_entry.id.toString()+"'";
+          }
+        
         }
     }
     sqlQuery+=")";
@@ -124,6 +126,7 @@ function addNew(){
     for (var i in timeData){
         logs = JSON.parse(timeData[i]);
         for (var j in logs) {
+          if(logs[j].day_entry != undefined ){
           var updated = new Date(logs[j].day_entry.updated_at);
           var created = new Date(logs[j].day_entry.created_at);
           if(updated>maxDates[0] | created > maxDates[1]){
@@ -140,6 +143,7 @@ function addNew(){
                   "deleted":false});
         
 				}
+          }
 			}
     }
     if(json.length > 0 ){

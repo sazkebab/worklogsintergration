@@ -1,3 +1,4 @@
+
 var config = require('./config');
 var request = require('request');
 const json2csv = require('json2csv');
@@ -77,8 +78,10 @@ function saveReportData(){
 		var json=[];
 		var firstInsert = true;
 		for (var i in costsData){
+			if(costsData[i].length > 0 ){
 			logs = JSON.parse(costsData[i]);
 			for (var j in logs) {
+			if (logs[j].user_assignment != undefined){
 				var updated = new Date(logs[j].user_assignment.updated_at);
 				var created = new Date(logs[j].user_assignment.created_at);
 				if(updated>maxDates[0] | created > maxDates[1]){
@@ -90,6 +93,8 @@ function saveReportData(){
                   "deleted":false});
         
 				}
+			}
+			}
 			}
 		}
 		if(json.length > 0 ){
