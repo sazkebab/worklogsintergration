@@ -1,5 +1,4 @@
 
-var cron = require('node-cron');
 var hc = require('./harvestClient.js');
 var hp = require('./harvestProject.js');
 var ht = require('./harvestTask.js');
