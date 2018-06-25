@@ -23,7 +23,7 @@ var ids;
 var init = function(){
     var today = new Date();
     var threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 1);
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 6);
     td = dateFormat(today);
     sd = dateFormat(threeMonthsAgo);
     harvestURL_pt2 +=sd+"&to="+td;
@@ -68,7 +68,8 @@ function addDataToArray(error, response, body) {
  
 //save data to SQL
 function deleteData(){
-  sqlQuery = "UPDATE `bigq-drd-1.Timesheets.harvestTimeLogs`  SET deleted=TRUE Where id not in ("
+        getIDs();
+  /*sqlQuery = "UPDATE `bigq-drd-1.Timesheets.harvestTimeLogs`  SET deleted=TRUE Where id not in ("
   var firstOne = true;
   for (var i in timeData){
         logs = JSON.parse(timeData[i]);
@@ -92,7 +93,7 @@ function deleteData(){
     .on('end', function() {
       console.log("complete");
       getIDs();
-    });
+    });*/
 }
 
 
