@@ -23,6 +23,7 @@ var init = function(){
  //when have data save it
 function getHarvestData(error, response, body) {      	
           if(!error){
+          //  console.log(body)
           addNew(body)
         }else{
           console.log("error: ", error);
@@ -58,7 +59,7 @@ function addNew(body){
                   "active": projects[i].project.active,
                   "invoice_type": projects[i].project.bill_by,
                   "hourly_rate": projects[i].project.hourly_rate,
-                  "budget": projects[i].project.cost_budget === null? 0:projects[i].project.cost_budget.toString(),
+                  "budget": projects[i].project.budget === null? 0:projects[i].project.budget.toString(),
                   "starts_on":  projects[i].project.starts_on,
                   "ends_on": projects[i].project.ends_on,
                   "created_at":projects[i].project.created_at,
@@ -82,7 +83,7 @@ function addNew(body){
 }
 
 
-//init();
+init();
 module.exports = {
   init: init,
 }

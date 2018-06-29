@@ -13,6 +13,8 @@ const table = dataset.table('harvestTimeLogs');
 //request form harvest
 var harvestURL_pt1 = "https://datarunsdeep.harvestapp.com/projects/"
 var harvestURL_pt2 = "/entries?from=";
+
+    var threeMonthsAgo = new Date();
 //request information
 var harvest_options = {
   headers: config.harvest 
@@ -22,7 +24,6 @@ var ids;
 //get data from 12 months ago to today of projects which are active
 var init = function(){
     var today = new Date();
-    var threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 6);
     td = dateFormat(today);
     sd = dateFormat(threeMonthsAgo);
@@ -84,7 +85,7 @@ function deleteData(){
         
         }
     }
-    sqlQuery+=")";
+    sqlQuery+=") and created_at >="+ threeMonthsAgo;
    bigquery.createQueryStream(sqlQuery)
     .on('error', console.error)
     .on('data', function(row) {
