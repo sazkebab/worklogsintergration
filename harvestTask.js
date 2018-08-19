@@ -23,12 +23,11 @@ var init = function(){
  //get data from harvest
 function getHarvestData(error, response, body) {      	
         if(!error){
-          //console.log(body)
-          //saveData(body);
           
           addNew(body)
         }else{
-          console.log("error: ", error);
+          
+          config.printToSlack("Harvest Task Error: "+ err);
         }
 }
 function addNew(body){
@@ -37,7 +36,6 @@ function addNew(body){
   bigquery.createQueryStream(sqlQuery)
   .on('error', console.error)
   .on('data', function(row) {
-    console.log()
     for(var i in row){
       if(row[i]!= null){
         maxDates.push(new Date(row[i].value));
@@ -67,36 +65,13 @@ function addNew(body){
       csv = json2csv.parse( json, {header:false});
       fs.writeFile('harvestTasks.csv', csv, function(err) {
         if (err) throw err;
-        console.log('file saved');
         table.load('harvestTasks.csv', function(err, apiResponse) {
-           console.log(err);
-          console.log(apiResponse);
+          config.printToSlack("Harvest Project Tasks Updated");
         });
       });
     }
   });
 }
-/*function saveData(body){
-        var tasks = JSON.parse(body);
-	sqlQuery = "INSERT INTO drd_harvestTasks ( `id`,  `task_name`, `is_billable`) VALUES";
-    connection.connect();
-     for (var i in tasks) {
-              if(i >0){
-                     sqlQuery+=",";
-             }
-            sqlQuery+="("+tasks[i].task.id+",'"+config.mysql_real_escape_string (tasks[i].task.name)+"','"+ tasks[i].task.billable_by_default+"') ";
-         
-     }
-   sqlQuery +="ON DUPLICATE KEY UPDATE `task_name`=VALUES(`task_name`), `is_billable`=VALUES(`is_billable`)";
- 	connection.query(sqlQuery, function(err, rows, fields) {
-             connection.end();
-             if (!err) {
-                     console.log('The solution is: ', rows);
-		} else{
-                     console.log('Error while performing Query.' + err);
- 		}
- 	});
-}*/
 
 //init();
 module.exports = {

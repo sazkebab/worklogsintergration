@@ -44,7 +44,6 @@ var init = function(){
 //if last record then add to SQL
 function getDataFromHarvest(){
   if (count >= ids.length){
-      console.log("the end");
       deleteData();
   }else{
       harvest_options.url = harvestURL_pt1+ ids[count]+harvestURL_pt2;
@@ -61,7 +60,7 @@ function addDataToArray(error, response, body) {
     }
     getDataFromHarvest();     	  
   }else{
-   	console.log(error);
+          config.printToSlack("Harvest Logs Error: "+ err);
   }       
 }
 
@@ -70,31 +69,6 @@ function addDataToArray(error, response, body) {
 //save data to SQL
 function deleteData(){
         getIDs();
-  /*sqlQuery = "UPDATE `bigq-drd-1.Timesheets.harvestTimeLogs`  SET deleted=TRUE Where id not in ("
-  var firstOne = true;
-  for (var i in timeData){
-        logs = JSON.parse(timeData[i]);
-        for (var j in logs) {
-          if(logs[j].day_entry != undefined ){
-            if(!firstOne){
-             sqlQuery+=",";
-            }
-            firstOne = false;
-            sqlQuery+="'"+logs[j].day_entry.id.toString()+"'";
-          }
-        
-        }
-    }
-    sqlQuery+=") and created_at >="+ threeMonthsAgo;
-   bigquery.createQueryStream(sqlQuery)
-    .on('error', console.error)
-    .on('data', function(row) {
-        console.log(row)
-    })
-    .on('end', function() {
-      console.log("complete");
-      getIDs();
-    });*/
 }
 
 
@@ -122,7 +96,6 @@ function getIDs(){
         insertedIds.push(row)
     })
     .on('end', function() {
-      console.log("complete");
       addNew(insertedIds);
     });
 }
@@ -165,13 +138,26 @@ function addNew(ids){
       csv = json2csv.parse( json, {header:false});
       fs.writeFile('harvestTimeLogs.csv', csv, function(err) {
         if (err) throw err;
-        console.log('file saved');
         table.load('harvestTimeLogs.csv', function(err, apiResponse) {
           if (err) console.err;
-          console.log(apiResponse);
+          config.printToSlack("Logs updated");
+          printProjectUpdates()
         });
       });
     }
+}
+
+
+function printProjectUpdates(){
+  msg="";
+   bigquery.createQueryStream(config.sqlStatement)
+    .on('error', console.error)
+    .on('data', function(row) {
+        msg += row.Client_Name+" has spent " + Math.round(row.hoursSpent * 100) / 100 +" hours out of " + row.hoursRetainer+ "\n";
+    })
+    .on('end', function() {
+      config.printToSlack(msg);
+    });
 }
 
 function dateFormat(d){

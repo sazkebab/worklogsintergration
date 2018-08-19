@@ -26,7 +26,10 @@ var init = function(){
 	ids=[];
 	sqlQuery = "Select id from `bigq-drd-1.Timesheets.harvestProjects` WHERE ACTIVE Group By id";
 	bigquery.createQueryStream(sqlQuery)
-		.on('error', console.error)
+		.on('error', function(err){
+			
+          config.printToSlack("Harvest Project Cost Error: "+ err);
+		})
 		.on('data', function(row) {
 			for(var i in row){
 				ids.push(row[i]);
@@ -43,7 +46,7 @@ function addDataToArray(error, response, body) {
     costsData.push(body);
     getDataFromHarvest();     	  
   }else{
-   	console.log(error);
+          config.printToSlack("Harvest Project Cost Error: "+ error);
   }       
 }
 
@@ -101,10 +104,9 @@ function saveReportData(){
       csv = json2csv.parse( json, {header:false});
       fs.writeFile('harvestProjectCosts.csv', csv, function(err) {
         if (err) throw err;
-        console.log('file saved');
         table.load('harvestProjectCosts.csv', function(err, apiResponse) {
           if (err) throw err;
-          console.log(apiResponse);
+          config.printToSlack("Harvest Project Cost Updated");
         });
       });
     }

@@ -27,7 +27,7 @@ function getHarvestData(error, response, body) {
           //removeData(body);
           addNew(body)
         }else{
-          console.log("error: ", error);
+          config.printToSlack("Harvest Client Error: "+ error);
         }
 }
 
@@ -44,12 +44,10 @@ function removeData(body){
   }
   sqlQuery+=")";
   bigquery.createQueryStream(sqlQuery)
-  .on('error', console.error)
-  .on('data', function(row) {
-    console(row)
-  })
+  .on('error', function(err){
+          config.printToSlack("Harvest Client Error: ", err);
+    })
   .on('end', function() {
-    console.log("complete")
     addNew(body);
   });
   
@@ -59,7 +57,6 @@ function addNew(body){
   var maxDates = []
   sqlQuery = "Select max(TIMESTAMP(updated_at)) as updated, max(TIMESTAMP(created_at)) as created from `bigq-drd-1.Timesheets.harvestClients` "
   bigquery.createQueryStream(sqlQuery)
-  .on('error', console.error)
   .on('data', function(row) {
     for(var i in row){
       if(row[i]!= null){
@@ -85,22 +82,21 @@ function addNew(body){
         
       }
     }
-    console.log(json)
     if(json.length > 0 ){
       csv = json2csv.parse( json, {header:false});
       fs.writeFile('harvestClient.csv', csv, function(err) {
         if (err) throw err;
-        console.log('file saved');
         table.load('harvestClient.csv', function(err, apiResponse) {
           if (err) throw err;
-          console.log(apiResponse);
+          //console.log(apiResponse);
+          config.printToSlack("Clients updated")
         });
       });
     }
   });
 }
 
-//init();
+init();
 module.exports = {
   init: init,
 }

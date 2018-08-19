@@ -23,19 +23,16 @@ var init = function(){
  //when have data save it
 function getHarvestData(error, response, body) {      	
           if(!error){
-          //  console.log(body)
           addNew(body)
         }else{
-          console.log("error: ", error);
+          config.printToSlack("Harvest Project Error: "+ err);
         }
 }
 function addNew(body){
   var maxDates = []
   sqlQuery = "Select max(TIMESTAMP(updated_at)) as updated, max(TIMESTAMP(created_at)) as created from `bigq-drd-1.Timesheets.harvestProjects` "
   bigquery.createQueryStream(sqlQuery)
-  .on('error', console.error)
   .on('data', function(row) {
-    console.log()
     for(var i in row){
       if(row[i]!= null){
         maxDates.push(new Date(row[i].value));
@@ -72,10 +69,9 @@ function addNew(body){
       csv = json2csv.parse( json, {header:false});
       fs.writeFile('harvestProjects.csv', csv, function(err) {
         if (err) throw err;
-        console.log('file saved');
         table.load('harvestProjects.csv', function(err, apiResponse) {
-           console.log(err);
-          console.log(apiResponse);
+           
+          config.printToSlack("Harvest Projects updataed Error: ");
         });
       });
     }
